@@ -9,14 +9,18 @@ const server = http.createServer(app);
 const { exec } = require('child_process');
 require("dotenv").config()
 
+const Gen = require("./models/gen-model")
+
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { connect } = require('http2');
+const connect_database = require('./utils/connect');
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 // Use cors middleware to allow requests from all origins for HTTP requests
 app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
-
-
+app.use('/user',require('./routes/user-routes'))
+app.use('/save-prompt',require('./routes/gen-routes'))
 app.get("/test", (req, res) => {
     res.json("hello")
   })
@@ -36,12 +40,20 @@ app.post("/generate", async (req, res) => {
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
       const result = await model.generateContentStream(input);
       io.emit('response', 'Generating...'); // Notify client that generation is in progress
+      const response = (await result.response).text()
+        console.log("-----------------------------------",response,"-----------------------------");
+
+        const toSaveResponse = await Gen({ prompt : input, response})
+        
+        await toSaveResponse.save()
 
       for await (let chunk of result.stream) {
           const chunkText = chunk.text();
-          console.log(chunkText);
+        //   console.log(chunkText);
           io.emit('response', chunkText); // Emit each chunk text to the client
       }
+
+      
     } catch (error) {
         console.log(error);
       res.status(500).json({ error });
@@ -117,8 +129,10 @@ io.on('connection', (socket) => {
 
 const PORT = process.env.PORT || 5000;
 
-server.listen(PORT, () => {
+server.listen(PORT, async() => {
+    await connect_database()
     console.log(`Server is running on port ${PORT}`);
+
 });
 
 
