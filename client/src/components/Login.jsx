@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Link, redirect } from 'react-router-dom';
 
 const Login = () => {
@@ -29,6 +28,17 @@ const Login = () => {
               type="password"
               id="password"
               placeholder="Enter your password"
+              className="p-3 rounded-lg border border-gray-300 bg-transparent focus:outline-none focus:border-blue-500 text-gray-200 placeholder-gray-300"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label htmlFor="password" className="text-gray-200">
+              Room
+            </label>
+            <input
+              type="room"
+              id="room"
+              placeholder="Enter Room-Id"
               className="p-3 rounded-lg border border-gray-300 bg-transparent focus:outline-none focus:border-blue-500 text-gray-200 placeholder-gray-300"
             />
           </div>
