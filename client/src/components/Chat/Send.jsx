@@ -1,16 +1,17 @@
-import { useState,useContext } from "react";
+import { useState, useContext } from "react";
 import AppContext from "../../utils/AppContext";
 
 const Send = () => {
 
-  const { text,getSocket } = useContext(AppContext)
+  const { text, getSocket } = useContext(AppContext)
 
 
   const [userMsg, setText] = useState("");
 
+
   const sendMessage = () => {
     if (userMsg.trim() !== "") {
-      getSocket().emit("newMsgToServer",userMsg)
+      getSocket().emit("newMsgToServer", { userMsg, username: sessionStorage.getItem("username") })
       setText(""); // Clear the input after sending the message
     }
   };

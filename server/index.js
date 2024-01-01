@@ -17,49 +17,67 @@ const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
-app.use('/user',require('./routes/user-routes'))
-app.use('/save-prompt',require('./routes/gen-routes'))
-app.use('/chat',require('./routes/Messages-Routes'))
+app.use('/user', require('./routes/user-routes'))
+app.use('/save-prompt', require('./routes/gen-routes'))
+app.use('/chat', require('./routes/Messages-Routes'))
 
 app.get("/test", (req, res) => {
     res.json("hello")
-  })
-  
+})
+
+
+
 
 app.post("/generate", async (req, res) => {
 
-    const { input } = req.body;
-  
+    const { input, roomId } = req.body;
+
     console.log(input);
-  
+
     if (!input) {
-      return res.status(400).json({ error: "Input text is required." });
+        return res.status(400).json({ error: "Input text is required." });
     }
-  
+
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-      const result = await model.generateContentStream(input);
-    //   io.emit('response', 'Generating...'); // Notify client that generation is in progress
-      const response = (await result.response).text()
+        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        const result = await model.generateContentStream(input);
+        //   io.emit('response', 'Generating...'); // Notify client that generation is in progress
+        const response = (await result.response).text()
         // console.log("-----------------------------------",response,"-----------------------------");
 
-        // const toSaveResponse = await Gen({ prompt : input, response})
-        
-        // await toSaveResponse.save()
 
-      for await (let chunk of result.stream) {
-          const chunkText = chunk.text();
-          console.log(chunkText);
-          io.emit('response', chunkText); // Emit each chunk text to the client
-      }
-      return res.status(200)
-      
+        if (roomId && input && response) {
+            const existingData = await Gen.findOne({ roomId });
+            
+            if (existingData) {
+              console.log({input,response});
+              // If the room already exists, push the new data to the array
+              existingData.data.push({ prompt:input, response });
+              await existingData.save();
+            } else {
+              // If the room doesn't exist, create a new document
+              const newData = new Gen({
+                roomId,
+                data: [{ prompt:input, response }],
+              });
+              await newData.save();
+            }
+        }
+
+
+        for await (let chunk of result.stream) {
+            const chunkText = chunk.text();
+            console.log(chunkText);
+            io.emit('response', chunkText); // Emit each chunk text to the client
+        }
+        return res.status(200)
+
     } catch (error) {
         console.log(error);
-      res.status(500).json({ error });
+        res.status(500).json({ error });
     }
-  })
-  
+})
+
 
 app.post('/run-code', async (req, res) => {
     const { language, code } = req.body;
@@ -112,14 +130,14 @@ const io = new Server(server, {
 });
 
 io.on('connection', (socket) => {
-    console.log('A user connected',socket.id);
+    console.log('A user connected', socket.data);
 
     socket.on('text-update', (updatedText) => {
         io.emit('text-update', updatedText);
-    });  
+    });
     socket.on('newMsgToServer', (msg) => {
         console.log(`msg from client ------------------------ ${msg}`);
-        const data = {isMyMessage:parseInt(Math.random()) , text:msg}
+        const data = { isMyMessage: msg.username, text: msg.userMsg }
         io.emit('newMsgToClient', data);
     });
 
@@ -134,7 +152,7 @@ io.on('connection', (socket) => {
 
 const PORT = process.env.PORT || 5000;
 
-server.listen(PORT, async() => {
+server.listen(PORT, async () => {
     await connect_database()
     console.log(`Server is running on port ${PORT}`);
 

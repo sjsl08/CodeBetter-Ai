@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef,useContext } from 'react';
 import axios from 'axios';
 import io from 'socket.io-client';
 import Editor from '@monaco-editor/react';
@@ -9,12 +9,13 @@ import Scene from './R3F/Scene';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism.css';
 import 'prismjs/components/prism-python';
+import AppContext from '../utils/AppContext';
 
 
-const socket = io('http://localhost:665');
 
 const Dashboard = () => {
 
+    const {getSocket} = useContext(AppContext)
 
 
     const outDiv = useRef(null)
@@ -26,14 +27,17 @@ const Dashboard = () => {
     const [htmlOut, setHtmlOut] = useState("")
 
     useEffect(() => {
-        socket.on('response', (generatedResponse) => {
-            generatedResponse = generatedResponse.replace(/"/g, "'");
-            setHtmlOut((prev) => [...prev, Prism.highlight(generatedResponse, Prism.languages.javascript, 'javascript')])
+        if(getSocket()){
 
-            setResponse((prev) => [...prev, generatedResponse]);
-            console.log(response);
-        });
-
+            getSocket().on('response', (generatedResponse) => {
+                generatedResponse = generatedResponse.replace(/"/g, "'");
+                setHtmlOut((prev) => [...prev, Prism.highlight(generatedResponse, Prism.languages.javascript, 'javascript')])
+                
+                setResponse((prev) => [...prev, generatedResponse]);
+                console.log(response);
+            });
+            
+        }
 
         // return () => {
         //   socket.disconnect();
@@ -53,7 +57,7 @@ const Dashboard = () => {
 
     const generateContent = async () => {
         try {
-            const response = await axios.post('http://localhost:5000/generate', { input: input });
+            const response = await axios.post('http://localhost:5000/generate', { input, roomId: "chandini" });
             console.log('Generated content:', response.data.generatedContent);
         } catch (error) {
             console.error('Error generating content:', error.response.data.error);

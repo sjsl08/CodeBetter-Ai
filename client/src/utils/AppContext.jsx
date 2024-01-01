@@ -16,6 +16,7 @@ export const AppContextProvider = ({ children }) => {
             socketRef.current = io('http://localhost:5000');
 
             socketRef.current.on('newMsgToClient', (newMessage) => {
+                console.log(newMessage);
                 setMessages((prevMessages) => [...prevMessages, newMessage]);
             });
         }
