@@ -2,7 +2,6 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
-const Docker = require('dockerode');
 const morgan = require('morgan');
 const app = express();
 const server = http.createServer(app);
@@ -12,7 +11,6 @@ require("dotenv").config()
 const Gen = require("./models/gen-model")
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-const { connect } = require('http2');
 const connect_database = require('./utils/connect');
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 // Use cors middleware to allow requests from all origins for HTTP requests
@@ -21,6 +19,8 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use('/user',require('./routes/user-routes'))
 app.use('/save-prompt',require('./routes/gen-routes'))
+app.use('/chat',require('./routes/Messages-Routes'))
+
 app.get("/test", (req, res) => {
     res.json("hello")
   })
@@ -39,20 +39,20 @@ app.post("/generate", async (req, res) => {
     try {
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
       const result = await model.generateContentStream(input);
-      io.emit('response', 'Generating...'); // Notify client that generation is in progress
+    //   io.emit('response', 'Generating...'); // Notify client that generation is in progress
       const response = (await result.response).text()
-        console.log("-----------------------------------",response,"-----------------------------");
+        // console.log("-----------------------------------",response,"-----------------------------");
 
-        const toSaveResponse = await Gen({ prompt : input, response})
+        // const toSaveResponse = await Gen({ prompt : input, response})
         
-        await toSaveResponse.save()
+        // await toSaveResponse.save()
 
       for await (let chunk of result.stream) {
           const chunkText = chunk.text();
-        //   console.log(chunkText);
+          console.log(chunkText);
           io.emit('response', chunkText); // Emit each chunk text to the client
       }
-
+      return res.status(200)
       
     } catch (error) {
         console.log(error);

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
 import io from 'socket.io-client';
 import "./App.css"
 import { BrowserRouter as Router, Route, Routes, BrowserRouter } from "react-router-dom"
@@ -9,6 +8,8 @@ import Signup from './components/Signup';
 import Layout from './components/Layout';
 import BG from './components/BG';
 import Dashboard from './components/Dashboard';
+
+
 
 const socket = io('http://localhost:5000'); // Update with your server URL
 
