@@ -1,21 +1,21 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef ,useContext} from 'react';
 import Message from './Message';
 import Send from './Send';
 import Header from './Header';
+import AppContext from '../../utils/AppContext';
+
 
 const Chatbox = ({response}) => {
+
+
+  const {messages} = useContext(AppContext)
+
+
+  console.log(messages);
   
   const lastElem = useRef(null);
 
-  const [messages, setMessages] = useState([
-    { isMyMessage: true, text: 'hello' },
-    { isMyMessage: false, text: 'hola' },
-  ]);
-
-  const addNewMessage = (newMessage) => {
-    const updatedMessages = [...messages, newMessage];
-    setMessages(updatedMessages);
-  };
+ 
 
   const [expand, setExpand] = useState(false);
 
@@ -36,12 +36,12 @@ const Chatbox = ({response}) => {
       <Header />
       <div className="bg-gray-800 flex-1 overflow-y-auto">
         {messages.map((message, index) => (
-          <Message key={index} isMyMessage={message.isMyMessage} text={response} userInitial={'A'} />
+          <Message key={index} isMyMessage={message.isMyMessage} text={message.text} userInitial={'A'} />
         ))}
         <div ref={lastElem}></div>
       </div>
       <div className="align-bottom">
-        <Send addNewMessage={addNewMessage} />
+        <Send  />
       </div>
     </div>
   );

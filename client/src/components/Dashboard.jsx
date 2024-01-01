@@ -11,9 +11,11 @@ import 'prismjs/themes/prism.css';
 import 'prismjs/components/prism-python';
 
 
-const socket = io('http://localhost:5000');
+const socket = io('http://localhost:665');
 
 const Dashboard = () => {
+
+
 
     const outDiv = useRef(null)
 
@@ -26,7 +28,7 @@ const Dashboard = () => {
     useEffect(() => {
         socket.on('response', (generatedResponse) => {
             generatedResponse = generatedResponse.replace(/"/g, "'");
-            setHtmlOut((prev) => [...prev, Prism.highlight(generatedResponse, Prism.languages.python, 'python')])
+            setHtmlOut((prev) => [...prev, Prism.highlight(generatedResponse, Prism.languages.javascript, 'javascript')])
 
             setResponse((prev) => [...prev, generatedResponse]);
             console.log(response);
@@ -70,6 +72,7 @@ const Dashboard = () => {
             console.error('Error running code:', error.response.data.error);
         }
     };
+
 
     return (
         <main className="flex h-screen font-sans bg-gray-100 text-gray-800">

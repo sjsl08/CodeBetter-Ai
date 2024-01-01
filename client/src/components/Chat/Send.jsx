@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useState,useContext } from "react";
+import AppContext from "../../utils/AppContext";
 
-const Send = ({ addNewMessage }) => {
-  const [text, setText] = useState("");
+const Send = () => {
+
+  const { text,getSocket } = useContext(AppContext)
+
+
+  const [userMsg, setText] = useState("");
 
   const sendMessage = () => {
-    if (text.trim() !== "") {
-      addNewMessage({ isMyMessage: true, text });
+    if (userMsg.trim() !== "") {
+      getSocket().emit("newMsgToServer",userMsg)
       setText(""); // Clear the input after sending the message
     }
   };
@@ -20,7 +25,7 @@ const Send = ({ addNewMessage }) => {
   return (
     <div className="flex items-center ">
       <textarea
-        value={text}
+        value={userMsg}
         onChange={(e) => setText(e.target.value)}
         onKeyUp={handleKeyPress}
         className="align-middle border border-gray-300 rounded-lg px-3 py-2 focus:outline-none placeholder-gray-500 text-gray-700 resize-none"

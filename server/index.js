@@ -112,10 +112,15 @@ const io = new Server(server, {
 });
 
 io.on('connection', (socket) => {
-    console.log('A user connected');
+    console.log('A user connected',socket.id);
 
     socket.on('text-update', (updatedText) => {
         io.emit('text-update', updatedText);
+    });  
+    socket.on('newMsgToServer', (msg) => {
+        console.log(`msg from client ------------------------ ${msg}`);
+        const data = {isMyMessage:parseInt(Math.random()) , text:msg}
+        io.emit('newMsgToClient', data);
     });
 
     socket.on('aiResponse', (updatedText) => {
@@ -135,32 +140,3 @@ server.listen(PORT, async() => {
 
 });
 
-
-
-// require("dotenv").config();
-// const readline = require("readline");
-// const { GoogleGenerativeAI } = require("@google/generative-ai");
-
-// // Access your API key as an environment variable (see "Set up your API key" above)
-// const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-
-// const userPrompt = new readline.createInterface({ input: process.stdin, output: process.stdout });
-
-// userPrompt.prompt();
-
-// userPrompt.on("line", async input => {
-
-//     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-//     const result = await model.generateContentStream(input);
-//     for await(let chunk of result.stream) {
-//         console.log(chunk.text());
-//     }
-//     // const response = await result.response;
-//     // const text = response.text();
-//     // console.log(text);
-//     userPrompt.prompt();
-// });
-
-
-
-// 
