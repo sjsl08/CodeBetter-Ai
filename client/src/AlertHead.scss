@@ -32,11 +32,18 @@ border-radius: 5px;
     position: relative;
     top: 0;
     left: 0;
-    background-color: hotpink;
+    background-color: transparent;
     height: 60px;
     width: 60px;
     border-radius: 50%;
     cursor: pointer;
+    .profile{
+        position: absolute;
+        z-index: -1;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+    }
 }
 
 // .chat-box {
@@ -128,10 +135,14 @@ div.chat div.chat-content span.you
   padding: 10px;
   padding-bottom: 25px;
   color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 
   box-shadow: 2px 2px 20px rgba(60,51,176,0.2),
               inset -10px -10px 55px rgba(255,255,255,0.1);
 }
+
 
 div.chat div.chat-content span.you span.time
 {
@@ -169,10 +180,10 @@ div.msg-box
 
 div.msg-box .ip-msg
 {
-  width: 70%;
+  width: 100%;
   font-size: 14px;
-  padding: 15px;
-  padding-right: 30%;
+  padding: 10px;
+//   padding-right: 30%;
   color: rgba(60,51,176,0.9);
   border: none;
   background: rgba(0,0,0,0.03);
@@ -188,9 +199,11 @@ div.msg-box .ip-msg::placeholder
    height: 60px;
    width: 20%;
    display: flex;
-   justify-content: space-between;
-   margin: auto;
+   //    justify-content: space-between;
+   
    svg{
+    cursor: pointer;
+       margin: auto;
     width: 30px;
    }
 }
