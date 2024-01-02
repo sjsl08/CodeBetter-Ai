@@ -8,6 +8,7 @@ import Layout from './components/Layout';
 import BG from './components/BG';
 import Dashboard from './components/Dashboard';
 import { AppContextProvider } from './utils/AppContext';
+import AlertHead from './AlertHead';
 
 
 
@@ -20,6 +21,7 @@ const App = () => {
       <AppContextProvider>
         <Layout>
           <Routes>
+            <Route path="/a" element={<AlertHead />} />
             <Route path="/" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/dashboard" element={<Dashboard />} />
