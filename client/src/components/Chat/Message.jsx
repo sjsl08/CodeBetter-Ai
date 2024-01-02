@@ -3,6 +3,8 @@ import 'prismjs/themes/prism.css';
 
 
 const Message = ({ isMyMessage, text }) => {
+
+  console.log(isMyMessage);
   const messageClasses = isMyMessage === sessionStorage.getItem("username")
     ? "bg-purple-600 text-white rounded-lg py-2 px-4 my-1 mx-4 max-w-xs break-all"
     : "bg-gray-300 text-gray-700 rounded-lg py-2 px-4 my-1 mx-4 max-w-xs break-all";
@@ -15,7 +17,7 @@ const Message = ({ isMyMessage, text }) => {
     <div className={messageContainerClasses}>
       {isMyMessage != sessionStorage.getItem("username") && (
         <div className=" w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center mr-2">
-          {sessionStorage.getItem("username")}
+          {isMyMessage}
         </div>
       )}
      

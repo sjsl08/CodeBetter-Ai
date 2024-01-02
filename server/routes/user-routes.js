@@ -45,7 +45,7 @@ router.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body
 
-        //console.log(req.body);
+        console.log(email,password);
         const getUserbyMail = await User.find({ email: email })
         // const getUserbyPhone = await User.find({ phone: email })
 
@@ -72,6 +72,24 @@ router.post("/login", async (req, res) => {
         console.log(error);
     }
 })
+
+router.get("/search/:username", async (req, res) => {
+    try {
+        const { username } = req.params;
+
+        const foundUsers = await User.find({ username: { $regex: new RegExp(username, "i") } })
+            .select('email _id'); 
+
+        if (foundUsers.length > 0) {
+            res.status(200).json(foundUsers);
+        } else {
+            res.status(404).json("No users found");
+        }
+    } catch (error) {
+        res.status(500).json("Server Error");
+        console.log(error);
+    }
+});
 
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Gen = require("../models/gen-model");
+const JWT_AUTH = require("../middleware/athentication")
 
 // POST route to save data
 router.post("/", async (req, res) => {
@@ -33,10 +34,14 @@ router.post("/", async (req, res) => {
 });
 
 // GET route to retrieve all data
-router.get("/", async (req, res) => {
+router.get("/:roomId", JWT_AUTH,async (req, res) => {
   try {
-    const allData = await Gen.find();
-    res.status(200).json(allData);
+
+    const {roomId} = req.params.roomId
+
+    const data = await Gen.findOne({ roomId });
+    console.log(data);
+    res.status(200).json(data);
   } catch (error) {
     res.status(500).json({ error: "Something went wrong" });
   }

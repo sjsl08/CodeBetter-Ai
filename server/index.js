@@ -37,7 +37,7 @@ app.post("/generate", async (req, res) => {
     if (!input) {
         return res.status(400).json({ error: "Input text is required." });
     }
-
+   
     try {
         const model = genAI.getGenerativeModel({ model: "gemini-pro" });
         const result = await model.generateContentStream(input);
@@ -45,36 +45,37 @@ app.post("/generate", async (req, res) => {
         const response = (await result.response).text()
         // console.log("-----------------------------------",response,"-----------------------------");
 
-
+        for await (let chunk of result.stream) {
+            const chunkText = chunk.text();
+            console.log(chunkText);
+            // io.emit('response', chunkText); // Emit each chunk text to the client
+        }
         if (roomId && input && response) {
             const existingData = await Gen.findOne({ roomId });
-            
+
             if (existingData) {
-              console.log({input,response});
-              // If the room already exists, push the new data to the array
-              existingData.data.push({ prompt:input, response });
-              await existingData.save();
+                // console.log({ input, response });
+                // If the room already exists, push the new data to the array
+                existingData.data.push({ prompt: input, response });
+                await existingData.save();
             } else {
-              // If the room doesn't exist, create a new document
-              const newData = new Gen({
-                roomId,
-                data: [{ prompt:input, response }],
-              });
-              await newData.save();
+                // If the room doesn't exist, create a new document
+                const newData = new Gen({
+                    roomId,
+                    data: [{ prompt: input, response }],
+                });
+                await newData.save();
             }
         }
 
 
-        for await (let chunk of result.stream) {
-            const chunkText = chunk.text();
-            console.log(chunkText);
-            io.emit('response', chunkText); // Emit each chunk text to the client
-        }
-        return res.status(200)
+
+        return res.status(200).json(response)
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error });
+         const response = (await error.response).text()
+        res.status(500).json(response);
     }
 })
 
@@ -85,6 +86,8 @@ app.post('/run-code', async (req, res) => {
 
     console.log(code);
     console.log(code.join('\n'));
+    code[0] = code[0].replace(/"/g, "'");
+
 
 
     let command = '';
@@ -129,8 +132,23 @@ const io = new Server(server, {
     },
 });
 
+
+
 io.on('connection', (socket) => {
-    console.log('A user connected', socket.data);
+    console.log('A user connected');
+
+    socket.on('joinRoom', (roomName) => {
+        socket.join(roomName);
+        console.log(`User joined room: ${roomName}`);
+    });
+
+    // Emit an event to a specific room
+    socket.on('emitToRoom', (roomName, data, author) => {
+        const processedData = { isMyMessage: author, text: data }
+
+        io.to(roomName).emit('testRoomEvent', processedData);
+        console.log(`Data emitted to room ${roomName}:`, processedData);
+    });
 
     socket.on('text-update', (updatedText) => {
         io.emit('text-update', updatedText);
@@ -139,6 +157,7 @@ io.on('connection', (socket) => {
         console.log(`msg from client ------------------------ ${msg}`);
         const data = { isMyMessage: msg.username, text: msg.userMsg }
         io.emit('newMsgToClient', data);
+        io.to("test").emit(data)
     });
 
     socket.on('aiResponse', (updatedText) => {

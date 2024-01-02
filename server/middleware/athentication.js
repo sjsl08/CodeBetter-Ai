@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken')
-l
 
 
 const JWT_AUTH = async (req, res, next) => {

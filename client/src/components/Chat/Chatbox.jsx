@@ -8,14 +8,13 @@ import AppContext from '../../utils/AppContext';
 const Chatbox = ({response}) => {
 
 
-  const {messages} = useContext(AppContext)
+  const {messages,getSocket} = useContext(AppContext)
 
-
-  console.log(messages);
-  
+  const socket = getSocket()
   const lastElem = useRef(null);
 
- 
+
+
 
   const [expand, setExpand] = useState(false);
 
@@ -28,7 +27,7 @@ const Chatbox = ({response}) => {
 
   return (
     <div
-      className={`h-screen border-2 border-gray-700 bg-gray-200 flex flex-col justify-between transition-all duration-500 ${
+      className={` flex-1 h-full border-2 border-gray-700 bg-gray-200 flex flex-col justify-between transition-all duration-500 ${
         expand ? 'w-full' : 'w-1/4' // Adjusted widths for transition
       }`}
     >

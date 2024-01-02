@@ -11,7 +11,10 @@ const Send = () => {
 
   const sendMessage = () => {
     if (userMsg.trim() !== "") {
-      getSocket().emit("newMsgToServer", { userMsg, username: sessionStorage.getItem("username") })
+      // getSocket().emit("newMsgToServer", { userMsg, username: sessionStorage.getItem("username") })
+      if(getSocket()){
+        getSocket().emit("emitToRoom", sessionStorage.getItem("roomId"),userMsg, sessionStorage.getItem("username") )
+      }
       setText(""); // Clear the input after sending the message
     }
   };
@@ -36,7 +39,7 @@ const Send = () => {
         onClick={sendMessage}
         className="self-end rounded-lg bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 text-white px-4 py-2 ml-2 transition duration-300 ease-in-out hover:from-purple-600 hover:to-blue-600 focus:outline-none"
       >
-        SEND
+        {sessionStorage.getItem("username")}
       </button>
     </div>
   );
