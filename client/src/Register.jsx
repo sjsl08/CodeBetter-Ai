@@ -102,53 +102,53 @@ export const Register = () => {
 
 
   // //login effects
-  // useEffect(() => {
-  //   function showTime() {
-  //     var a_p = "";
-  //     var today = new Date();
-  //     var curr_hour = today.getHours();
-  //     var curr_minute = today.getMinutes();
-  //     var curr_second = today.getSeconds();
-  //     if (curr_hour < 12) {
-  //       a_p = " AM ";
-  //     } else {
-  //       a_p = " PM ";
-  //     }
-  //     if (curr_hour === 0) {
-  //       curr_hour = 12;
-  //     }
-  //     if (curr_hour > 12) {
-  //       curr_hour = curr_hour - 12;
-  //     }
-  //     curr_hour = checkTime(curr_hour);
-  //     curr_minute = checkTime(curr_minute);
-  //     curr_second = checkTime(curr_second);
-  //     document.getElementById('login-time').innerHTML = curr_hour + ":" + curr_minute + "<span style='font-size:10px;'>" + a_p + "</span>";
-  //   }
+  useEffect(() => {
+    function showTime() {
+      var a_p = "";
+      var today = new Date();
+      var curr_hour = today.getHours();
+      var curr_minute = today.getMinutes();
+      var curr_second = today.getSeconds();
+      if (curr_hour < 12) {
+        a_p = " AM ";
+      } else {
+        a_p = " PM ";
+      }
+      if (curr_hour === 0) {
+        curr_hour = 12;
+      }
+      if (curr_hour > 12) {
+        curr_hour = curr_hour - 12;
+      }
+      curr_hour = checkTime(curr_hour);
+      curr_minute = checkTime(curr_minute);
+      curr_second = checkTime(curr_second);
+      document.getElementById('login-time').innerHTML = curr_hour + ":" + curr_minute + "<span style='font-size:10px;'>" + a_p + "</span>";
+    }
 
-  //   function checkTime(i) {
-  //     if (i < 10) {
-  //       i = "0" + i;
-  //     }
-  //     return i;
-  //   }
+    function checkTime(i) {
+      if (i < 10) {
+        i = "0" + i;
+      }
+      return i;
+    }
 
-  //   setInterval(showTime, 500);
+    setInterval(showTime, 500);
 
-  //   var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  //   var myDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  //   var date = new Date();
-  //   var day = date.getDate();
-  //   var month = date.getMonth();
-  //   var thisDay = date.getDay();
-  //   thisDay = myDays[thisDay];
-  //   var yy = date.getYear();
-  //   var year = (yy < 1000) ? yy + 1900 : yy;
+    var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var myDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    var date = new Date();
+    var day = date.getDate();
+    var month = date.getMonth();
+    var thisDay = date.getDay();
+    thisDay = myDays[thisDay];
+    var yy = date.getYear();
+    var year = (yy < 1000) ? yy + 1900 : yy;
 
-  //   document.getElementById('login-day').innerHTML = thisDay;
-  //   document.getElementById('login-date').innerHTML = day;
-  //   document.getElementById('login-month').innerHTML = months[month];
-  // }, []);
+    document.getElementById('login-day').innerHTML = thisDay;
+    document.getElementById('login-date').innerHTML = day;
+    document.getElementById('login-month').innerHTML = months[month];
+  }, []);
 
 
   //handle Signup
@@ -179,7 +179,7 @@ export const Register = () => {
         </div>
       </div>
       <div id="rightmenu">
-        {/* <img className='mobius' src="../public/Mobius.svg" alt="mobius" /> */}
+        <img className='mobius' src="../public/Mobius.svg" alt="mobius" />
         <div className="semi_arc e5 c_ease">
           <div className="semi_arc_3 e5_1">
             <div className="semi_arc_3 e5_2">

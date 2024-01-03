@@ -1,6 +1,5 @@
-
 :root {
-    --main-color: linear-gradient(to bottom, #cc99ff 0%, #ff99cc 100%);;
+    --main-color: linear-gradient(to bottom, #cc99ff 0%, #ff99cc 100%);
     --bgColor:black;
     --mainGradiant:linear-gradient(to right, #007AD1 0%, #AD00A2 100%);
     --mainGradiantr:linear-gradient(to right, #ff3399 0%, #9933ff 100%);
@@ -8,10 +7,7 @@
     --mainGe:#AD00A2;
     --mobiusB:#007AD1;
     --mobiusp:#AD00A2;
-
-
-
-  }
+}
   .mobius{
     position: absolute;
     width: 90px;
