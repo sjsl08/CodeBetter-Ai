@@ -110,10 +110,10 @@ const Dashboard = () => {
                 code: file === "js" ? [jsCode] : [pyCode],
             });
             console.log(codeRes.data);
-            setOutput(codeRes.data);
             setCodeResHistory(prevHistory => [...prevHistory, codeRes.data]); // Save previous codeRes outputs
         } catch (error) {
             console.error('Error running code:', error.response.data);
+            setCodeResHistory(prevHistory => [...prevHistory, error.response.data]); // Save previous codeRes outputs
         }
     };
 
@@ -193,9 +193,11 @@ const Dashboard = () => {
                     <div className='absolute z-40 border-2 border-green-400 terminal bg-gray-950 bottom-0 h-96 overflow-y-scroll'>
                         <div className='terminalH'><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M20.6 4H3.4A2.4 2.4 0 0 0 1 6.4v11.2A2.4 2.4 0 0 0 3.4 20h17.2a2.4 2.4 0 0 0 2.4-2.4V6.4A2.4 2.4 0 0 0 20.6 4Z" fill="#007AD1" fill-opacity=".16" stroke="#007AD1" stroke-width="1.5" stroke-miterlimit="10"></path><path d="m5 16 4-4-4-4" stroke="#007AD1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M11 16h8" stroke="#007AD1" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"></path></g></svg> <span>Terminal</span></div>
                         {codeResHistory.map((prevCodeRes, index) => (
-                            <div key={index} className="p-4 bg-gray-900 rounded-lg mb-2">
-                                <div className="text-lg text-white font-mono">
-                                    Output : {prevCodeRes}
+                            <div key={index} className="p-4 bg-gray-900 rounded-lg mb-2 p-2">
+                                <div className={`m-5 text-white font-mono ${prevCodeRes.startsWith("Output") ? "text-green-600" : "text-red-600"}`}>
+                                 <pre>
+                                     {prevCodeRes}
+                                    </pre> 
                                 </div>
                             </div>
                         ))}

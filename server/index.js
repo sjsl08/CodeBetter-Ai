@@ -113,27 +113,27 @@ app.post('/run-code', async (req, res) => {
         if (error) {
 
 
-            const regex = /> \/tmp\/code\.js && node \/tmp\/code\.js/g;
-            const match = error.message.match(regex);
+            // const regex = /> \/tmp\/code\.js && node \/tmp\/code\.js/g;
+            // const match = error.message.match(regex);
 
-            if (match) {
-                const extractedCommand = match[0];
-                console.log(extractedCommand);
-            } else {
-                console.log('Command not found');
-            }
+            // if (match) {
+            //     const extractedCommand = match[0];
+            //     console.log(extractedCommand);
+            // } else {
+            //     console.log('Command not found');
+            // }
 
-            // console.error(`Error: ${error.message.split("Syntax error")}`);
-            res.status(500).send(error.message);
+            console.error(`Error: ${error.message}`);
+            res.status(500).send(`Error: ${error.message}`);
             return;
         }
         if (stderr) {
             console.error(`Runtime Error: ${stderr}`);
-            res.status(200).send(stderr);
+            res.status(200).send(`Runtime Error: ${stderr}`);
             return;
         }
         console.log(`Output: ${stdout}`);
-        res.status(200).send(stdout);
+        res.status(200).send(`Output: ${stdout}`);
     });
 });
 
