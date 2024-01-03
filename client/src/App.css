@@ -23,13 +23,14 @@ display: flex;
     width: 25px;
 }
 .active{
-    border-bottom:1px solid  #007AD1 !important;
+    border-bottom:1px solid  #5850c0 !important;
 
 }
 .diactive{
     border-bottom: 1px solid transparent !important;
 }
 .headerB{
+    border-bottom: 2px solid #5850c0 !important;
     height: 41px !important;
 }
 .asidePanel{
@@ -38,14 +39,15 @@ display: flex;
     right: 0px;
     width: 560px;
     height: calc(100vh - 44px);
-    background: var(--mainGradiant) !important;
+    /* background: var(--mainGradiant); */
+    background:  rgba(38, 38, 38, 0.496) !important;
 }
 .mainContainer{
     height: calc(100vh - 41px) !important;
 }
 .terminal{
     width: calc(100vw - 560px);
-    border: 1px solid #007AD1 !important;
+    border: 1px solid #5850c0 !important;
 }
 .terminalH{
     display: flex;
@@ -53,11 +55,12 @@ display: flex;
 .terminalH span{
 color: gray; 
 padding:0px 10px; 
-border-bottom: 1px solid #007AD1;  
+border-bottom: 1px solid #5850c0;  
 }
 .terminalH svg{
-    width: 20px;
-    border-bottom: 1px solid #007AD1;  
+    padding:0px 5px; 
+    width: 30px;
+    border-bottom: 1px solid #5850c0;  
 
 
 }
@@ -65,4 +68,67 @@ border-bottom: 1px solid #007AD1;
     margin-right: 20px;
     margin-top: 5px;
     
+}
+.botText{
+    display: inline-block;
+    background: #fff;
+    padding: 10px;
+    padding-bottom: 25px;
+    box-shadow: 2px 2px 20px -2px rgba(60,51,176,0.2);
+    color: rgba(60,51,176,1);
+}
+.userText{
+    background: #5850c0;
+  display: flex;
+  flex-direction: column;
+  margin-right: 0px;
+  margin-left: auto;
+  padding: 10px;
+  padding-bottom: 25px;
+  color: #fff;
+}
+
+div.msg-box1
+{
+    border: 2px solid gray;
+    background-color: transparent;
+    /* box-shadow: 0 -7px 20px -14px gray; */
+  position: absolute;
+  width: 97%;
+  bottom: 0;
+  padding: 5px;
+  left: 0;
+  display: flex;
+  overflow: hidden;
+  border-radius: 20px;
+  margin:0px 10px;
+}
+
+div.msg-box1 .ip-msg1
+{
+    /* height: 80px; */
+    padding-left: 10px !important;
+
+    border-radius: 20px;
+  width: 100%;
+  font-size: 16px;
+  /* padding: 10px; */
+  color: white !important;
+  border: none;
+  background: rgba(0,0,0,0.09);
+  resize:none;
+
+  outline: none !important;
+  border: none !important;
+}
+
+div.msg-box1 .ip-msg1::placeholder
+{
+    font-size: 16px;
+  color: gray !important;
+}
+
+.botbtn{
+    width: 50px;
+    margin: 0px 10px;
 }
