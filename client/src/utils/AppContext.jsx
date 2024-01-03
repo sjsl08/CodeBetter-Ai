@@ -15,6 +15,7 @@ export const AppContextProvider = ({ children }) => {
     const [jsCode, setJsCode] = useState('//javascript');
     const [pyCode, setPyCode] = useState('#python');
     const [input, setInput] = useState('');
+    const [pplInRoom,setPplInRoom] = useState(0)
 
     const handleCode = (type, value) => {
         setInput(value)
@@ -51,7 +52,9 @@ export const AppContextProvider = ({ children }) => {
 
                 // Listen for events within the room
                 socketRef.current.on('testRoomEvent', (data) => {
+                    console.log(data);
                     console.log(`Received data from ${sessionStorage.getItem("roomId")}:`, data, sessionStorage.getItem("username"));
+                    setPplInRoom(data.ppl)
                     setMessages((prevMessages) => [...prevMessages, data]);
 
                     // Handle the received data here (e.g., update state)
@@ -107,7 +110,7 @@ export const AppContextProvider = ({ children }) => {
         localStorage.clear()
         sessionStorage.clear()
         setIsAuthenticated(false);
-        navigate('/'); // Redirect to login or desired route
+        navigate('/'); // 
     };
 
     const getSocket = () => {
@@ -142,7 +145,8 @@ export const AppContextProvider = ({ children }) => {
 
             // setHtmlOut((prev) => [...prev, Prism.highlight(generatedResponse, Prism.languages.javascript, 'javascript')])
         } catch (error) {
-            console.error('Error generating content:', error.response.data.error);
+            console.error('Error generating content:', error.response.data);
+            return error.response.data.msg
         }
     };
 
@@ -161,7 +165,7 @@ export const AppContextProvider = ({ children }) => {
 
 
     return (
-        <AppContext.Provider value={{ messages, getSocket, navigate, location, login, logout, signUp, isAuthenticated,generateContent ,jsCode,pyCode,handleCode,input}}>
+        <AppContext.Provider value={{ messages, getSocket, navigate, location, login, logout, signUp, isAuthenticated,generateContent ,jsCode,pyCode,handleCode,input,pplInRoom}}>
             {children}
         </AppContext.Provider>
     );
