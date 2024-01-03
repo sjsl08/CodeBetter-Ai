@@ -1,40 +1,24 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
-import axios from "axios"
 import AppContext from '../utils/AppContext';
 
 const Nav = () => {
-  const { logout } = useContext(AppContext);
-  const [string, setString] = useState("");
-  let timerId = null;
 
-  const debouncedSearch = (value) => {
-    clearTimeout(timerId);
-    timerId = setTimeout(() => {
-      findUser(value);
-    }, 1000);
-  };
-
-  const findUser = async (value) => {
-    try {
-      const res = await axios.get(`http://localhost:5000/user/search/${value}`);
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleInputChange = (e) => {
-    const { value } = e.target;
-    setString(value);
-    debouncedSearch(value);
-  };
-
+  const {logout} = useContext(AppContext)
   return (
-    <nav className="bg-blue-950">
-      <button onClick={() => logout()}>SIGNOUT</button>
+    <nav className="bg-gray-900 h-full p-4 ">
+      <div className=" flex flex-col  items-center">
+        {/* CodeBetter Logo or brand */}
+        <div className="flex flex-col items-center space-x-2">
+          <div className="text-white text-2xl font-extrabold">CodeBetter</div>
+          <div className="bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 text-transparent bg-clip-text">Ai Within</div>
+        </div>
+
+        <button onClick={()=>{logout()}}>logout</button>
+
+      </div>
     </nav>
   );
-};
+}
 
 export default Nav;

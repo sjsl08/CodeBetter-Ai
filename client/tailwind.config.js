@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       colors :{
-        vsdark:"rgb(30,30,30)"
+        vsdark:"#1E1E1E"
       }
     },
   },

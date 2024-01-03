@@ -5,7 +5,7 @@ import theme from 'react-syntax-highlighter/dist/esm/styles/prism/cb';
 import AppContext from '../../utils/AppContext';
 
 
-const Ai = ({ code }) => {
+const Ai = ({ setAiTab, AiTab }) => {
 
 
     const { generateContent, generateResponse } = useContext(AppContext)
@@ -114,13 +114,12 @@ const Ai = ({ code }) => {
     };
 
     return (
-        <div className="flex w-50vw  max-h-[95vh] flex-col ">
+        <div className={`flex flex-1  border-2 border-red-700 max-h-[95vh] flex-col ${AiTab ? "flex" : "hidden"}`}>
             <header className="bg-gray-900 text-white py-4 text-center">
-                <h1 className="text-2xl font-bold">Chat with AI</h1>
-                <p className="text-sm">Code Better</p>
+                <button onClick={() => setAiTab(false)}>msg</button>
             </header>
 
-            <div ref={chatContainerRef} className="overflow-y-scroll flex-1 p-4  border-2 border-r-red-600">
+            <div ref={chatContainerRef} className="overflow-y-scroll flex-1 p-4">
                 {messages.map((message) => (
                     <div
                         key={message.id}
