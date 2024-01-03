@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import theme from 'react-syntax-highlighter/dist/esm/styles/prism/synthwave84';
 import AppContext from '../../utils/AppContext';
+import '../../App.css'
 
 
 const Ai = ({ setAiTab, AiTab }) => {
@@ -114,9 +115,9 @@ const Ai = ({ setAiTab, AiTab }) => {
     };
 
     return (
-        <div className={`flex flex-1  border-2 border-red-700 max-h-[95vh] flex-col ${AiTab ? "flex" : "hidden"}`}>
-            <header className="bg-gray-900 text-white text-center">
-                <button onClick={() => setAiTab(false)}>CodeBetter Ai</button>
+        <div className={`flex flex-1 asidePanel  border-2 border-red-700 flex-col ${AiTab ? "flex" : "hidden"}`}>
+            <header className="bg-gray-900 text-white py-4 text-center">
+                <button onClick={() => setAiTab(false)}>msg</button>
             </header>
 
             <div ref={chatContainerRef} className="overflow-y-scroll flex-1 p-4">
