@@ -9,6 +9,7 @@ import BG from './components/BG';
 import Dashboard from './components/Dashboard';
 import { AppContextProvider } from './utils/AppContext';
 import AlertHead from './AlertHead';
+import { Register } from './Register';
 
 
 
@@ -22,9 +23,11 @@ const App = () => {
         <Layout>
           <Routes>
             <Route path="/a" element={<AlertHead />} />
-            <Route path="/" element={<Login />} />
+            <Route path="/" element={<Register />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/login" element={<Login />} />
+
           </Routes>
         </Layout>
       </AppContextProvider>
