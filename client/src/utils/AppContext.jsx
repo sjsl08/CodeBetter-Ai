@@ -12,6 +12,28 @@ export const AppContextProvider = ({ children }) => {
     const socketRef = useRef(null);
     const [roomId,setRoomID] = useState("")
 
+    const [jsCode, setJsCode] = useState('//javascript');
+    const [pyCode, setPyCode] = useState('#python');
+    const [input, setInput] = useState('');
+
+    const handleCode = (type, value) => {
+        setInput(value)
+        if (type === "js") {
+            setJsCode(value)
+        } else {
+            setPyCode(value)
+        }
+
+        const roomId = sessionStorage.getItem('roomId') ? sessionStorage.getItem('roomId') : sessionStorage.getItem('username');
+
+        // Emit the code change event to the room
+        getSocket().emit('codeChange', {
+            type,
+            value,
+            roomId,
+            user: sessionStorage.getItem("username")
+        });
+    }
 
     useEffect(() => {
         if (isAuthenticated && !socketRef.current) {
@@ -33,6 +55,16 @@ export const AppContextProvider = ({ children }) => {
                     setMessages((prevMessages) => [...prevMessages, data]);
 
                     // Handle the received data here (e.g., update state)
+                });
+
+                getSocket().on('codeChanged', ({ type, value, user }) => {
+                    // Update the state based on the type (js or py)
+                    console.log(user);
+                    if (type === 'js') {
+                        setJsCode(value);
+                    } else {
+                        setPyCode(value);
+                    }
                 });
             }
 
@@ -71,6 +103,7 @@ export const AppContextProvider = ({ children }) => {
     };
 
     const logout = () => {
+        console.log("here");
         localStorage.clear()
         sessionStorage.clear()
         setIsAuthenticated(false);
@@ -128,7 +161,7 @@ export const AppContextProvider = ({ children }) => {
 
 
     return (
-        <AppContext.Provider value={{ messages, getSocket, navigate, location, login, logout, signUp, isAuthenticated,generateContent }}>
+        <AppContext.Provider value={{ messages, getSocket, navigate, location, login, logout, signUp, isAuthenticated,generateContent ,jsCode,pyCode,handleCode,input}}>
             {children}
         </AppContext.Provider>
     );

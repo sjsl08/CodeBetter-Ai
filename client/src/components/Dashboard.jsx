@@ -15,27 +15,25 @@ import Ai from './Ai/Ai';
 
 
 
+
 const Dashboard = () => {
 
-    const editorRef = useRef(null);
+    const { getSocket, input,isAuthenticated,jsCode,pyCode,handleCode } = useContext(AppContext)
 
-    const handleEditorDidMount = (editor, monaco) => {
-        editorRef.current = editor;
-    }
 
-    const showValue = () => {
-        alert(editorRef.current.getValue());
-    }
+    
+    const [codeResHistory, setCodeResHistory] = useState([]); // Track previous codeRes outputs
 
-    const { getSocket, isAuthenticated } = useContext(AppContext)
+
+
 
 
     const [file, setFile] = useState("js")
+    const [AiTab, setAiTab] = useState(true)
 
     const outDiv = useRef(null)
 
     const [response, setResponse] = useState('');
-    const [input, setInput] = useState('');
     const [output, setOutput] = useState('');
 
     const [htmlOut, setHtmlOut] = useState("")
@@ -51,30 +49,17 @@ const Dashboard = () => {
         }
     };
 
-    useEffect(() => {
-        if (getSocket()) {
+    // useEffect(() => {
+    //     if (getSocket()) {
 
-            getSocket().on('response', (generatedResponse) => {
-                // generatedResponse = generatedResponse.replace(/"/g, "'");
-                // const pattern = /```javascript|```/g;
-                // generatedResponse = generatedResponse.replace(pattern, '');
+           
 
-                // setHtmlOut((prev) => [...prev, Prism.highlight(generatedResponse, Prism.languages.javascript, 'javascript')])
+    //     }
 
-                // setResponse((prev) => [...prev, generatedResponse]);
-                // console.log(response);
-            });
-
-        }
-
-
-
-
-
-        // return () => {
-        //   socket.disconnect();
-        // };
-    }, []);
+    //     // return () => {
+    //     //   socket.disconnect();
+    //     // };
+    // }, []);
 
 
     useEffect(() => {
@@ -97,6 +82,11 @@ const Dashboard = () => {
         setInput(e.target.value);
     };
 
+    const handleAiTab = (value) => {
+        if(sessionStorage.getItem("username") == sessionStorage.getItem("roomId")) return
+        setAiTab(value)
+    }
+
     const generateContent = async () => {
         try {
             const response = await axios.post('http://localhost:5000/generate', { input, roomId: sessionStorage.getItem("roomId") ? sessionStorage.getItem("roomId") : sessionStorage.getItem("username") });
@@ -116,29 +106,28 @@ const Dashboard = () => {
     const run = async () => {
         try {
             const codeRes = await axios.post('http://localhost:5000/run-code', {
-                language: 'javascript',
-                code: [input],
+                language: file == "js" ? "javascript" : "python",
+                code: file === "js" ? [jsCode] : [pyCode],
             });
             console.log(codeRes.data);
             setOutput(codeRes.data);
+            setCodeResHistory(prevHistory => [...prevHistory, codeRes.data]); // Save previous codeRes outputs
         } catch (error) {
-            console.error('Error running code:', error.response.data.error);
+            console.error('Error running code:', error.response.data);
         }
     };
-
 
     if (!isAuthenticated) {
         return <Navigate to="/" />;
     }
 
-    const grid = [50, 50]; // Adjust the values based on your snapping preference
-
+   
 
     return (
-        <main className="flex relative  font-sans w-screen text-gray-800">
-            <header className="flex bg-purple-100 text-white">
+        <main className="flex relative  font-sans w-screen vsDark text-gray-800">
+            {/* <header className="flex bg-purple-100 text-white">
                 <Nav />
-            </header>
+            </header> */}
             <div className="flex flex-col">
                 <div className='flex'>
                     <div className='flex-1'>
@@ -150,15 +139,16 @@ const Dashboard = () => {
                                 >PY</button>
                             </div>
                             <div>
-                                <button>Run</button>
+                                <button onClick={run}>Run</button>
                             </div>
                         </div>
                         {file === "js" && <>
                             <Editor
                                 height={'92vh'}
                                 width={'70vw'}
-                                onChange={(value) => setInput(value)}
+                                onChange={(value) => handleCode("js", value)}
                                 theme="vs-dark"
+                                value={jsCode}
                                 defaultValue='//javascript'
                                 defaultLanguage="javascript"
                             />
@@ -168,8 +158,9 @@ const Dashboard = () => {
                             <Editor
                                 height={'92vh'}
                                 width={'70vw'}
-                                onChange={(value) => setInput(value)}
+                                onChange={(value) => handleCode("py", value)}
                                 theme="vs-dark"
+                                value={pyCode}
                                 defaultValue='#python'
                                 defaultLanguage="python"
                             />
@@ -177,50 +168,25 @@ const Dashboard = () => {
                         }
                     </div>
 
-                    <Ai code={response} />
-                    {/* <ChatBox /> */}
-
+                        
+                        <Ai code={response} setAiTab={handleAiTab} AiTab={AiTab} />
+                        
+                        <ChatBox setAiTab={handleAiTab}  AiTab={AiTab}/>
+                    
 
                 </div>
-                {terminal && <div className='absolute border-2 border-green-400 w-[95vw] bg-gray-950 bottom-0 h-96'>
+                {terminal &&
+                    <div className='absolute z-40 border-2 border-green-400 w-[95vw] bg-gray-950 bottom-0 h-96 overflow-y-scroll'>
+                        {codeResHistory.map((prevCodeRes, index) => (
+                            <div key={index} className="p-4 bg-gray-900 rounded-lg mb-2">
+                                <div className="text-lg text-white font-mono">
+                                    Output : {prevCodeRes}
+                                </div>
+                            </div>
+                        ))}
 
-                    <div className="flex flex-col border-2 border-black">
 
-                        <div className='border-2  h-2/4 overflow-y-scroll break-all border-blue-950'>
-
-                            <pre ref={outDiv}>
-                            </pre>
-
-                            <textarea
-                                type="text"
-                                onChange={handleInput}
-                                className="bg-gray-200 py-3 rounded-lg flex-1 ml-4 resize-none"
-                                placeholder="Enter input here"
-                            />
-                        </div>
-                    </div>
-                    <div className="flex justify-between p-4">
-                        <button
-                            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg transition duration-300 ease-in-out"
-                            onClick={generateContent}
-                        >
-                            Generate
-                        </button>
-                        <button
-                            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg transition duration-300 ease-in-out"
-                            onClick={run}
-                        >
-                            RUN
-                        </button>
-                    </div>
-
-                    {output && (
-                        <div className="p-4 bg-gray-200 rounded-lg">
-                            <div className="text-lg">Output: {output}</div>
-                        </div>
-                    )}
-
-                </div>}
+                    </div>}
 
             </div>
 
