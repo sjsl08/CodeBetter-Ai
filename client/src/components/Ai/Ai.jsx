@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import theme from 'react-syntax-highlighter/dist/esm/styles/prism/cb';
+import theme from 'react-syntax-highlighter/dist/esm/styles/prism/synthwave84';
 import AppContext from '../../utils/AppContext';
 import '../../App.css'
 

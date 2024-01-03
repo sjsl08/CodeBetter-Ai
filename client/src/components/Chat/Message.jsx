@@ -17,7 +17,7 @@ const Message = ({ isMyMessage, text }) => {
     <div className={messageContainerClasses}>
       {isMyMessage != sessionStorage.getItem("username") && (
         <div className=" w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center mr-2">
-          {isMyMessage}
+          {isMyMessage.toUpperCase()[0]}
         </div>
       )}
      

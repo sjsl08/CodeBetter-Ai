@@ -74,8 +74,8 @@ app.post("/generate", async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        const response = (await error.response).text()
-        res.status(500).json(response);
+        // const response = (await error.response).text()
+        res.status(500).json({ msg: "ERROR" });
     }
 })
 
@@ -111,7 +111,7 @@ app.post('/run-code', async (req, res) => {
     // Run code in a Docker container
     exec(`docker run --rm ${image} ${command}`, (error, stdout, stderr) => {
         if (error) {
-           
+
 
             const regex = /> \/tmp\/code\.js && node \/tmp\/code\.js/g;
             const match = error.message.match(regex);
@@ -170,8 +170,9 @@ io.on('connection', (socket) => {
     });
 
     // Emit an event to a specific room
-    socket.on('emitToRoom', (roomName, data, author) => {
-        const processedData = { isMyMessage: author, text: data }
+    socket.on('emitToRoom', (roomName, data, author,) => {
+
+        const processedData = { isMyMessage: author, text: data, ppl: io.sockets.adapter.rooms.get(roomName)?.size || 0 }
 
         io.to(roomName).emit('testRoomEvent', processedData);
         console.log(`Data emitted to room ${roomName}:`, processedData);

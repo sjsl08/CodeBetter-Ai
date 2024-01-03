@@ -22,11 +22,11 @@ const App = () => {
       <AppContextProvider>
         <Layout>
           <Routes>
-            <Route path="/a" element={<AlertHead />} />
+            {/* <Route path="/a" element={<AlertHead />} /> */}
             <Route path="/" element={<Register />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/login" element={<Login />} />
+            {/* <Route path="/login" element={<Login />} /> */}
 
           </Routes>
         </Layout>

@@ -39,7 +39,7 @@ const Send = () => {
         onClick={sendMessage}
         className=" rounded-lg bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 text-white px-4 py-2 ml-2 transition duration-300 ease-in-out hover:from-purple-600 hover:to-blue-600 focus:outline-none"
       >
-        {sessionStorage.getItem("username")}
+        Send
       </button>
     </div>
   );
