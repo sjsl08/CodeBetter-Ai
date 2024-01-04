@@ -41,12 +41,14 @@ const Dashboard = () => {
     const [terminal, setTerminal] = useState(false)
 
     const handleKeyPress = (event) => {
+        console.log(event);
         if (event.ctrlKey && event.key === '`') {
             // Perform your desired action here when Ctrl + ` is pressed
             console.log('Ctrl + ` pressed');
             setTerminal(!terminal)
             // Add your functionality here
         }
+
     };
 
     // useEffect(() => {
@@ -125,9 +127,7 @@ const Dashboard = () => {
 
     return (
         <main className="flex relative  mainContainer font-sans w-screen vsDark text-gray-800">
-            {/* <header className="flex bg-purple-100 text-white">
-                <Nav />
-            </header> */}
+           
             <div className="flex flex-col">
                 <div className='flex'>
                     <div className='flex-1'>
@@ -201,8 +201,6 @@ const Dashboard = () => {
                                 </div>
                             </div>
                         ))}
-
-
                     </div>}
 
             </div>

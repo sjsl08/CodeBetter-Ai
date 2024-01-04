@@ -23,7 +23,7 @@ const Ai = ({ setAiTab, AiTab }) => {
 
     const [messages, setMessages] = useState([
         { id: 1, text: 'This is an AI message with code:\n```javascript\nconsole.log("Hello, World!");\n```', sender: 'AI Bot' },
-        { id: 2, text: 'This is a user message.', sender: 'User' },
+        { id: 1, text: 'Ask me anything !!!!', sender: 'AI Bot' },
     ]);
     const [newMessage, setNewMessage] = useState('');
 
@@ -123,12 +123,15 @@ const Ai = ({ setAiTab, AiTab }) => {
     };
 
     return (
-        <div className={`flex flex-1 asidePanel  flex-col ${AiTab ? "flex" : "hidden"}`}>
-            <header className=" text-white py-4 text-center">
-                <button onClick={() => setAiTab(false)}>AI Chatbot</button>
+        <div className={`flex flex-1 asidePanel  border-2 border-red-700 flex-col ${AiTab ? "flex" : "hidden"}`}>
+            <header className="text-white py-4 text-center">
+                <div >AI Chatbot</div>
+                <button  onClick={() => setAiTab(false)} className='switchRoom'>
+                <svg viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M981.4 502.3c-9.1 0-18.3-2.9-26-8.9L539 171.7c-15.3-11.8-36.7-11.8-52 0L70.7 493.4c-18.6 14.4-45.4 10.9-59.7-7.7-14.4-18.6-11-45.4 7.7-59.7L435 104.3c46-35.5 110.2-35.5 156.1 0L1007.5 426c18.6 14.4 22 41.1 7.7 59.7-8.5 10.9-21.1 16.6-33.8 16.6z" fill="#5F6379"></path><path d="M810.4 981.3H215.7c-70.8 0-128.4-57.6-128.4-128.4V534.2c0-23.5 19.1-42.6 42.6-42.6s42.6 19.1 42.6 42.6v318.7c0 23.8 19.4 43.2 43.2 43.2h594.8c23.8 0 43.2-19.4 43.2-43.2V534.2c0-23.5 19.1-42.6 42.6-42.6s42.6 19.1 42.6 42.6v318.7c-0.1 70.8-57.7 128.4-128.5 128.4z" fill="#5850c0"></path></g></svg>
+                    </button>
             </header>
 
-            <div ref={chatContainerRef} className="overflow-y-scroll flex-1 p-4">
+            <div ref={chatContainerRef} className="messageArea  vsDark overflow-y-scroll flex-1 p-4">
                 {messages.map((message) => (
                     <motion.div initial={{ opacity: 0, y: 50 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -141,7 +144,7 @@ const Ai = ({ setAiTab, AiTab }) => {
                                 } p-3 rounded-lg max-w-md`}
                         >
                             <ReactMarkdown components={components}>{message.text}</ReactMarkdown>
-                            <p className="text-xs text-gray-500 mt-1 break-all truncate">{message.sender}</p>
+                            <p className="text-xs font-medium mt-1 break-all truncate">{message.sender}</p>
                         </div>
                     </motion.div>
                 ))}

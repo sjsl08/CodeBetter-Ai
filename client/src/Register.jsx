@@ -179,7 +179,7 @@ export const Register = () => {
         </div>
       </div>
       <div id="rightmenu">
-        <img className='mobius' src="../public/Mobius.svg" alt="mobius" />
+        {/* <img className='mobius' src="../public/Mobius.svg" alt="mobius" /> */}
         <div className="semi_arc e5 c_ease">
           <div className="semi_arc_3 e5_1">
             <div className="semi_arc_3 e5_2">

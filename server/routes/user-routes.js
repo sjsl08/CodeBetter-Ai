@@ -58,7 +58,7 @@ router.post("/login", async (req, res) => {
             if (isPasswordCorrect) {
                 const user_id = getUserbyMail[0]._id
                 const token = jwt.sign({ id: user_id }, process.env.JWT_SECRET)
-                res.status(200).json({ user: user.username, token })
+                res.status(200).json({ user: user.email, token })
                 //console.log("here");
             } else {
                 res.status(400).json("Invalid Password")
